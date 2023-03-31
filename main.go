@@ -7,8 +7,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/drone/drone-go/plugin/secret"
 	"github.com/drone/drone-file-secret/plugin"
+	"github.com/drone/drone-go/plugin/secret"
 
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
@@ -18,9 +18,10 @@ import (
 )
 
 type config struct {
-	Address            string        `envconfig:"DRONE_BIND"`
-	Debug              bool          `envconfig:"DRONE_DEBUG"`
-	Secret             string        `envconfig:"DRONE_SECRET"`
+	Address  string `envconfig:"DRONE_BIND"`
+	Debug    bool   `envconfig:"DRONE_DEBUG"`
+	Secret   string `envconfig:"DRONE_SECRET"`
+	BasePath string `envconfig:"DRONE_BASE_PATH"`
 }
 
 func main() {
@@ -39,10 +40,13 @@ func main() {
 	if spec.Address == "" {
 		spec.Address = ":3000"
 	}
+	if spec.BasePath == "" {
+		logrus.Fatalln("missing secret base path")
+	}
 
 	http.Handle("/", secret.Handler(
 		spec.Secret,
-		plugin.New(),
+		plugin.New(spec.BasePath),
 		logrus.StandardLogger(),
 	))
 
