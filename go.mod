@@ -7,7 +7,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/drone/drone-go v0.0.0-20181022043707-2d78f279e8ef
 	github.com/golang/protobuf v1.3.2 // indirect
-	github.com/google/go-cmp v0.2.0
+	github.com/google/go-cmp v0.2.0 // indirect
 	github.com/joho/godotenv v1.2.0
 	github.com/kelseyhightower/envconfig v1.3.0
 	github.com/onsi/gomega v1.4.2 // indirect
@@ -16,7 +16,7 @@ require (
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
 	golang.org/x/net v0.0.0-20190620200207-3b0461eec859 // indirect
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58
-	golang.org/x/sys v0.0.0-20190813064441-fde4db37ae7a // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/gemnasium/logrus-airbrake-hook.v2 v2.1.2 // indirect
