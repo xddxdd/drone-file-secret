@@ -43,7 +43,7 @@ func (p *plugin) Find(ctx context.Context, req *secret.Request) (*drone.Secret, 
 	return &drone.Secret{
 		Name: name,
 		Data: value,
-		Pull: true, // always true. use X-Drone-Events to prevent pull requests.
-		Fork: true, // always true. use X-Drone-Events to prevent pull requests.
+		Pull: false,
+		Fork: false,
 	}, nil
 }
