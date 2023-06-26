@@ -18,18 +18,27 @@ bea26a2221fd8090ea38720fc445eca6
 Download and run the plugin:
 
 ```text
-$ docker run -d \
-  --publish=3000:3000 \
-  --env=DRONE_SECRET=bea26a2221fd8090ea38720fc445eca6 \
-  --env=DRONE_BASE_PATH=/secrets \
-  -v "/path/to/secrets:/secrets" \
-  --restart=always \
-  --name=drone-file-secret drone/file-secret
+$ go build
+$ env \
+  DRONE_BIND=127.0.0.1:3000 \
+  DRONE_SECRET=bea26a2221fd8090ea38720fc445eca6 \
+  DRONE_BASE_PATH=/path/to/secrets \
+  ./drone-file-secret
 ```
 
 Update your runner configuration to include the plugin address and the shared secret.
 
 ```text
-DRONE_SECRET_PLUGIN_ENDPOINT=http://1.2.3.4:3000
+DRONE_SECRET_PLUGIN_ENDPOINT=http://127.0.0.1:3000
 DRONE_SECRET_PLUGIN_TOKEN=bea26a2221fd8090ea38720fc445eca6
+```
+
+Define secrets in `.drone.yml`:
+
+```yaml
+kind: secret
+name: secret_name       # Reference this secret by this name in your pipeline
+get:
+  path: secret_filename # Relative path of secret DRONE_BASE_PATH, slashes are allowed
+  name: anything        # This value has no effect
 ```
