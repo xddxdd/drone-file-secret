@@ -5,6 +5,7 @@
 package main
 
 import (
+	"net"
 	"net/http"
 
 	"github.com/drone/drone-file-secret/plugin"
@@ -18,10 +19,11 @@ import (
 )
 
 type config struct {
-	Address  string `envconfig:"DRONE_BIND"`
-	Debug    bool   `envconfig:"DRONE_DEBUG"`
-	Secret   string `envconfig:"DRONE_SECRET"`
-	BasePath string `envconfig:"DRONE_BASE_PATH"`
+	Address    string `envconfig:"DRONE_BIND"`
+	UnixSocket string `envconfig:"DRONE_UNIX_SOCKET"`
+	Debug      bool   `envconfig:"DRONE_DEBUG"`
+	Secret     string `envconfig:"DRONE_SECRET"`
+	BasePath   string `envconfig:"DRONE_BASE_PATH"`
 }
 
 func main() {
@@ -52,10 +54,21 @@ func main() {
 
 	var g errgroup.Group
 
-	g.Go(func() error {
-		logrus.Infof("server listening on address %s", spec.Address)
-		return http.ListenAndServe(spec.Address, nil)
-	})
+	if spec.UnixSocket != "" {
+		g.Go(func() error {
+			l, err := net.Listen("unix", spec.UnixSocket)
+			if err != nil {
+				return err
+			}
+			logrus.Infof("server listening on socket %s", spec.UnixSocket)
+			return http.Serve(l, nil)
+		})
+	} else {
+		g.Go(func() error {
+			logrus.Infof("server listening on address %s", spec.Address)
+			return http.ListenAndServe(spec.Address, nil)
+		})
+	}
 
 	if err := g.Wait(); err != nil {
 		logrus.Fatal(err)
