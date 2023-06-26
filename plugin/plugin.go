@@ -8,6 +8,7 @@ import (
 	"context"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/drone/drone-go/drone"
 	"github.com/drone/drone-go/plugin/secret"
@@ -38,7 +39,7 @@ func (p *plugin) Find(ctx context.Context, req *secret.Request) (*drone.Secret, 
 	if err != nil {
 		return nil, err
 	}
-	value := string(data)
+	value := strings.TrimSpace(string(data))
 
 	return &drone.Secret{
 		Name: name,
